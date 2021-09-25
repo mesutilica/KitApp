@@ -11,8 +11,9 @@ namespace KitApp.Data.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.AuthorName).HasMaxLength(50);
             builder.Property(x => x.PublisherName).HasMaxLength(50);
-            
+            builder.HasKey(x => x.Amount);
             builder.ToTable("Books");
         }
     }

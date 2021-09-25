@@ -11,5 +11,7 @@ namespace KitApp.Core.Entities
         public string AuthorName { get; set; }
         [Display(Name = "Yayıncı Adı")]
         public string PublisherName { get; set; }
+        [Display(Name = "Miktar")]
+        public int Amount { get; set; }
     }
 }

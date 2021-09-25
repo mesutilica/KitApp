@@ -15,6 +15,7 @@ namespace KitApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new BookConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
             //base.OnModelCreating(modelBuilder);
         }
     }
