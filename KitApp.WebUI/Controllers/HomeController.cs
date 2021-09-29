@@ -1,4 +1,5 @@
-﻿using KitApp.WebUI.Models;
+﻿using KitApp.Core.Services;
+using KitApp.WebUI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +13,17 @@ namespace KitApp.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IBookService _bookService;
+        public HomeController(ILogger<HomeController> logger, IBookService bookService)
         {
             _logger = logger;
+            _bookService = bookService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var books = await _bookService.GetAllAsync();
+            return View(books);
         }
 
         public IActionResult Privacy()

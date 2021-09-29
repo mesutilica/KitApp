@@ -24,5 +24,6 @@ namespace KitApp.Core.Repositories
         void RemoveRange(IEnumerable<TEntity> entities);
 
         TEntity Update(TEntity entity);
+        Task<int> SaveChangesAsync();
     }
 }

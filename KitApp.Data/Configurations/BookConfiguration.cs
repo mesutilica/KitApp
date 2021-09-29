@@ -13,7 +13,7 @@ namespace KitApp.Data.Configurations
             builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
             builder.Property(x => x.AuthorName).HasMaxLength(50);
             builder.Property(x => x.PublisherName).HasMaxLength(50);
-            builder.HasKey(x => x.Amount);
+            builder.Property(x => x.Amount);
             builder.ToTable("Books");
         }
     }

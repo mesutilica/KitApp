@@ -66,5 +66,10 @@ namespace KitApp.Data.Repositories
 
             return entity;
         }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
 }

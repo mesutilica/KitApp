@@ -21,12 +21,10 @@ namespace KitApp.Core.Entities
         public string Phone { get; set; }
         [Display(Name = "Aktif mi?")]
         public bool IsActive { get; set; }
-        [ScaffoldColumn(false)]
-        public Guid ActivateGuid { get; set; }
-        [Display(Name = "Admin mi?")]
-        public bool IsAdmin { get; set; }
         [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime CreateDate { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpireDate { get; set; }
         public List<Book> Books { get; set; }
         public AppUser()
         {

@@ -17,9 +17,9 @@ namespace KitApp.Data.Configurations
             builder.Property(x => x.Password).IsRequired().HasMaxLength(150);
             builder.Property(x => x.Phone).HasMaxLength(15);
             builder.Property(x => x.IsActive);
-            builder.Property(x => x.ActivateGuid);
-            builder.Property(x => x.IsAdmin);
             builder.Property(x => x.CreateDate);
+            builder.Property(x => x.RefreshToken);
+            builder.Property(x => x.RefreshTokenExpireDate);
             builder.ToTable("AppUsers");
         }
     }

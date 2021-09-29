@@ -1,3 +1,10 @@
+using KitApp.Core.Repositories;
+using KitApp.Core.Services;
+using KitApp.Core.UnitOfWorks;
+using KitApp.Data;
+using KitApp.Data.Repositories;
+using KitApp.Data.UnitOfWorks;
+using KitApp.Service.Services;
 using KitApp.WebUI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,14 +34,23 @@ namespace KitApp.WebUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddMemoryCache();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddRazorPages();
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IService<>), typeof(Service<>));
+            //Servis injection
+            services.AddScoped<IAppUserService, AppUserService>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +60,7 @@ namespace KitApp.WebUI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+                DataSeeding.Seed(app);
             }
             else
             {
@@ -61,6 +78,9 @@ namespace KitApp.WebUI
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "admin",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

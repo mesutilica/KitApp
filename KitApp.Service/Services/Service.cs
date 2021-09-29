@@ -60,6 +60,11 @@ namespace KitApp.Service.Services
             _unitOfWork.Commit();
         }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _repository.SaveChangesAsync();
+        }
+
         public async Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _repository.SingleOrDefaultAsync(predicate);

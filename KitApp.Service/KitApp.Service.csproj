@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KitApp.Core\KitApp.Core.csproj" />
+    <ProjectReference Include="..\KitApp.Data\KitApp.Data.csproj" />
   </ItemGroup>
 
 </Project>
