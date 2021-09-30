@@ -1,9 +1,48 @@
-﻿@model List<KitApp.Core.Entities.Book>
+﻿@model AppUser
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@foreach (var item in Model)
-{
-    <div class="text-center">@item.Name </div>
-}
+<div class="container col-xl-10 col-xxl-8 px-4 py-3">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3">KitApp <br /> Online Kütüphane</h1>
+            <p class="col-lg-10 fs-4">KitApp ile kütüphane ayağınıza geliyor. <br /> Denemek için ücretsiz kayıt olun online kütüphaneyi kullanmaya başlayın..</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" asp-action="Add">
+                <div class="form-floating mb-3">
+                    <input asp-for="Name" type="text" class="form-control" id="Name" placeholder="Adınız">
+                    <label for="Name">Adınız</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="SurName" type="text" class="form-control" id="SurName" placeholder="Soyadınız">
+                    <label for="SurName">Soyadınız</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="name@example.com">
+                    <label for="Email">Email</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Password" type="password" class="form-control" id="Password" placeholder="Şifre">
+                    <label for="Password">Şifre</label>
+                </div>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Beni hatırla
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="button" id="btnCreate">Kaydol</button>
+                <hr class="my-4">
+                <small class="text-muted">Kaydol'a tıklayarak kullanım şartlarını kabul etmiş olursunuz.</small>
+            </form>
+            <div class="text-center" style="display:none;" id="ajax-loader">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div id="sonuc" class="alert alert-success" style="display:none;"></div>
+
+        </div>
+    </div>
+</div>

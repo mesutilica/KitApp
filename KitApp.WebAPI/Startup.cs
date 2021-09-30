@@ -48,6 +48,8 @@ namespace KitApp.WebAPI
                 });
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KitApp.WebAPI", Version = "v1" });
@@ -75,7 +77,7 @@ namespace KitApp.WebAPI
             //app.UseRewriter(new RewriteOptions().AddRedirectToHttps(301, 44324));
 
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -84,6 +86,10 @@ namespace KitApp.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

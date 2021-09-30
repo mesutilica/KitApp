@@ -28,4 +28,8 @@
     <ProjectReference Include="..\KitApp.Service\KitApp.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\lib\jquery\jquery.min.js" />
+  </ItemGroup>
+
 </Project>

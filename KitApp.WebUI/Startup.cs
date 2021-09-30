@@ -5,6 +5,7 @@ using KitApp.Data;
 using KitApp.Data.Repositories;
 using KitApp.Data.UnitOfWorks;
 using KitApp.Service.Services;
+using KitApp.WebUI.ApiServices;
 using KitApp.WebUI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,10 @@ namespace KitApp.WebUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient<AppUserApiService>(options =>
+            {
+                options.BaseAddress = new Uri(Configuration["baseUrl"]);
+            });
             services.AddMemoryCache();
             services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
