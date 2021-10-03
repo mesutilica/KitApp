@@ -46,7 +46,15 @@ namespace KitApp.WebAPI
                         ClockSkew = System.TimeSpan.Zero
                     };
                 });
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
             services.AddAutoMapper(typeof(Startup));
+            services.AddSession();
+            services.AddMvc();
             services.AddControllers();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -62,6 +70,7 @@ namespace KitApp.WebAPI
             //Servis injection
             services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IUserBooksService, UserBooksService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
@@ -75,14 +84,17 @@ namespace KitApp.WebAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KitApp.WebAPI v1"));
             }
             //app.UseRewriter(new RewriteOptions().AddRedirectToHttps(301, 44324));
-
+            app.UseSession();
+            //app.UseMvc();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCors("MyPolicy");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

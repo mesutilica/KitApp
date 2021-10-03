@@ -1,6 +1,5 @@
 ﻿using KitApp.Core.Repositories;
 using KitApp.Core.UnitOfWorks;
-//using KitApp.Data.EntityFramework;
 using KitApp.Data.Repositories;
 using System.Threading.Tasks;
 
@@ -11,9 +10,11 @@ namespace KitApp.Data.UnitOfWorks
         private readonly AppDbContext _context;
         private AppUserRepository _appUserRepository;
         private BookRepository _bookRepository;
+        private UserBooksRepository _userBooksRepository;
 
         public IAppUserRepository user => _appUserRepository = _appUserRepository ?? new AppUserRepository(_context);
         public IBookRepository book => _bookRepository = _bookRepository ?? new BookRepository(_context);
+        public IUserBooksRepository userbook => _userBooksRepository = _userBooksRepository ?? new UserBooksRepository(_context);
 
         public UnitOfWork(AppDbContext appDbContext)
         {

@@ -33,8 +33,9 @@ namespace KitApp.WebAPI.Application.UserOperations.Commands.CreateToken
 
                 //Refresh token Users tablosuna işleniyor.
                 user.RefreshToken = token.RefreshToken;
-                user.RefreshTokenExpireDate = token.Expiration.AddMinutes(5);
-                _context.SaveChangesAsync();
+                user.RefreshTokenExpireDate = token.Expiration.AddMinutes(30);
+                _context.Update(user);
+               // _context.SaveChangesAsync();
 
                 return token;
             }

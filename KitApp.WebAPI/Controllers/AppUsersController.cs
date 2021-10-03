@@ -5,18 +5,25 @@ using Microsoft.AspNetCore.Mvc;
 using KitApp.Core.Entities;
 using KitApp.Core.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using KitApp.WebAPI.Models;
 
 namespace KitApp.WebAPI.Controllers
 {
+    [EnableCors]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AppUsersController : ControllerBase
     {
         private readonly IAppUserService _context;
-        public AppUsersController(IAppUserService context)
+        private readonly IBookService _bookService;
+        private readonly IUserBooksService _userBookService;
+        public AppUsersController(IAppUserService context, IBookService bookService, IUserBooksService userBookService)
         {
             _context = context;
+            _bookService = bookService;
+            _userBookService = userBookService;
         }
 
         // GET: api/AppUsers
@@ -77,7 +84,77 @@ namespace KitApp.WebAPI.Controllers
             }
         }
 
+        [HttpPost("PostBookAdd")]
+        public async Task<ActionResult<PostBookAdd>> PostBookAddAsync(PostBookAdd postBookAdd)//[FromBody] 
+        {
+            try
+            {
+                var appUser = await _context.SingleOrDefaultAsync(x => x.RefreshToken == postBookAdd.RefreshToken);
 
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                var book = await _bookService.GetByIdAsync(postBookAdd.Id);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+                //ppUser.Books.Add(book);
+                //_context.Update(appUser);
+                var userBook = new UserBooks()
+                {
+                    Amount = 1,
+                    AppUser = appUser,
+                    AppUserId = appUser.Id,
+                    Book = book,
+                    BookId = book.Id,
+                    ReservationDate = DateTime.Now,
+                    ReturnDate = DateTime.Now.AddDays(7)
+                };
+                await _userBookService.AddAsync(userBook);
+                book.Amount -= 1;
+                _bookService.Update(book);
+                //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
+                return Ok(postBookAdd);
+            }
+            catch
+            {
+                return Problem("Hata Oluştu!");
+            }
+
+        }
+        [HttpPost("PostBookRemove")]
+        public async Task<ActionResult<PostBookAdd>> PostBookRemoveAsync(PostBookAdd postBookAdd)//[FromBody] 
+        {
+            
+                var appUser = await _context.SingleOrDefaultAsync(x => x.RefreshToken == postBookAdd.RefreshToken);
+
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                var book = await _bookService.GetByIdAsync(postBookAdd.Id);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+                var userBook = await _userBookService.SingleOrDefaultAsync(u => u.BookId == book.Id && u.AppUserId == appUser.Id);
+                _userBookService.Remove(userBook);
+                book.Amount += 1;
+                _bookService.Update(book);
+                //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
+                return Ok(postBookAdd);
+            try
+            {}
+            catch
+            {
+                return Problem("Hata Oluştu!");
+            }
+
+        }
         // DELETE: api/AppUsers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppUser(int id)
@@ -94,5 +171,11 @@ namespace KitApp.WebAPI.Controllers
             return NoContent();
         }
 
+        [HttpGet("GetMyBooks")]
+        public async Task<IEnumerable<UserBooks>> GetBooks([FromQuery] string token)
+        {
+            var list = await _userBookService.GetAllBooksByUsersAsync(u => u.AppUser.RefreshToken == token);
+            return list;
+        }
     }
 }

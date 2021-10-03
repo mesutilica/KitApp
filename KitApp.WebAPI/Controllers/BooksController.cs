@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using KitApp.Core.Entities;
 using KitApp.Core.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace KitApp.WebAPI.Controllers
 {
+    [EnableCors]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -59,6 +61,7 @@ namespace KitApp.WebAPI.Controllers
             return NoContent();
         }
 
+        
         // POST: api/Books
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)

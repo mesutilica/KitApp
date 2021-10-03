@@ -1,126 +1,110 @@
-﻿@model KitApp.Core.Entities.AppUser
+﻿@model HomePageViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Anasayfa";
+    
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Online Kütüphane</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-</head>
-<body>
-    <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                KitApp
-            </a>
-
-            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
-            </ul>
-
-            <div class="col-md-3 text-end">
-                <button type="button" class="btn btn-outline-primary me-2">Login</button>
-                <button type="button" class="btn btn-primary">Sign-up</button>
-            </div>
-        </header>
-    </div>
-
-    <div class="container col-xl-10 col-xxl-8 px-4 py-3">
-        <div class="row align-items-center g-lg-5 py-5">
-            <div class="col-lg-7 text-center text-lg-start">
-                <h1 class="display-4 fw-bold lh-1 mb-3">KitApp <br /> Online Kütüphane</h1>
-                <p class="col-lg-10 fs-4">KitApp ile kütüphane ayağınıza geliyor. <br /> Denemek için ücretsiz kayıt olun online kütüphaneyi kullanmaya başlayın..</p>
-            </div>
-            <div class="col-md-10 mx-auto col-lg-5">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Kayıt Ol</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Giriş Yap</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <form class="p-4 p-md-5 border rounded-3 bg-light mt-3" method="post" id="record">
-                            <div class="form-floating mb-3">
-                                <input asp-for="Name" type="text" class="form-control" id="Name" placeholder="Adınız">
-                                <label for="Name">Adınız</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input asp-for="SurName" type="text" class="form-control" id="SurName" placeholder="Soyadınız">
-                                <label for="SurName">Soyadınız</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="name@example.com">
-                                <label for="Email">Email</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input asp-for="Password" type="password" class="form-control" id="Password" placeholder="Şifre">
-                                <label for="Password">Şifre</label>
-                            </div>
-                            <button class="w-100 btn btn-lg btn-primary" type="button" id="btnCreate">Kaydol</button>
-                            <hr class="my-4">
-                            <small class="text-muted">Kaydol'a tıklayarak kullanım şartlarını kabul etmiş olursunuz.</small>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <form class="p-4 p-md-5 border rounded-3 bg-light mt-3" method="post" id="login">
-
-                            <div class="form-floating mb-3">
-                                <input asp-for="Email" type="email" class="form-control" id="loginEmail" placeholder="name@example.com">
-                                <label for="Email">Email</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <input asp-for="Password" type="password" class="form-control" id="loginPassword" placeholder="Şifre">
-                                <label for="Password">Şifre</label>
-                            </div>
-                            @*<div class="checkbox mb-3">
-                                <label>
-                                    <input type="checkbox" value="remember-me"> Beni hatırla
-                                </label>
-                            </div>*@
-                            <button class="w-100 btn btn-lg btn-primary" type="button" id="btnLogin">Giriş</button>
-                        </form>
-                    </div>
+<div class="container col-xl-10 col-xxl-8 px-4 py-3">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3">KitApp <br /> Online Kütüphane</h1>
+            <p class="col-lg-10 fs-4">KitApp ile kütüphane ayağınıza geliyor. <br /> Denemek için ücretsiz kayıt olun online kütüphaneyi kullanmaya başlayın..</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-light mt-3" method="post" id="record">
+                <h3>Ücretsiz Kaydol</h3>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.AppUser.Name" type="text" class="form-control" id="Name" placeholder="Adınız" required>
+                    <label for="Name">Adınız *</label>
                 </div>
-                
-                <div class="text-center" style="display:none;" id="ajax-loader">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.AppUser.SurName" type="text" class="form-control" id="SurName" placeholder="Soyadınız" required>
+                    <label for="SurName">Soyadınız *</label>
                 </div>
-                <div id="sonuc" class="alert alert-success mt-1" style="display:none;"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.AppUser.Email" type="email" class="form-control" id="Email" placeholder="name@example.com" required>
+                    <label for="Email">Email *</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="@Model.AppUser.Password" type="password" class="form-control" id="Password" placeholder="Şifre" required>
+                    <label for="Password">Şifre *</label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="button" id="btnCreate">Kaydol</button>
+                <hr class="my-4">
+                <div id="error"></div>
+                <small class="text-muted">Kaydol'a tıklayarak kullanım şartlarını kabul etmiş olursunuz.</small>
+            </form>
 
+            <div class="text-center" style="display:none;" id="ajax-loader">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
+            <div id="sonuc" class="alert alert-success mt-1" style="display:none;"></div>
+            
         </div>
     </div>
-    <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+</div>
+
+@section Scripts{
     <script>
         $(function () {
-            $("#btnCreate").click(CreateUser);
-        });
-        var someTabTriggerEl = document.querySelector('#profile-tab');
-        var tab = new bootstrap.Tab(someTabTriggerEl);
 
-        
+            function isEmail(email) {
+                var pattern = /^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/;
+                return pattern.test(email);
+            }
+            $("#btnCreate").click(function () {
+                var gonder = true;
+                var errormessage = "";
+                $("#error").html("");
+
+                if ($("#email").val() == "") {
+                    errormessage += "<p>Email alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+                if (isEmail($("#email").val()) == false) {
+                    errormessage += "<p>Email alanı düzgün girilmedi.</p>";
+                    gonder = false;
+                }
+
+
+                if ($("#Name").val() == "") {
+                    errormessage += "<p>Adınız alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+                if ($("#SurName").val() == "") {
+                    errormessage += "<p>Soyadınız alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+                if ($("#Password").val() == "") {
+                    errormessage += "<p>Şifre alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+
+                if (errormessage != "") {
+                    $("#error").html(errormessage);
+                }
+                if (gonder) {
+                    CreateUser();
+                };
+            });
+        });
+        //var someTabTriggerEl = document.querySelector('#profile-tab');
+        //var tab = new bootstrap.Tab(someTabTriggerEl);
+
+
         function CreateUser() {
 
             var Name = $("#Name").val();
             var SurName = $("#SurName").val();
             var Email = $("#Email").val();
             var Password = $("#Password").val();
-            var loginEmail = $("#loginEmail");
-            var loginPassword = $("#loginPassword");
+            //var loginEmail = $("#loginEmail");
+            //var loginPassword = $("#loginPassword");
 
             var appUser = {
                 "Name": Name,
@@ -131,7 +115,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/api/AppUsers",
+                url: "/api/User",
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify(appUser),
@@ -144,10 +128,10 @@
                 },
                 success: function (data) {
                     console.log(data);
-                    document.getElementById("record").reset();
-                    $("#sonuc").show().html(" Kayıt Başarılı!").delay("5000").fadeOut();
-                    loginEmail.val(data.email); loginPassword.val(data.password);
-                    tab.show();
+                    //document.getElementById("record").reset();
+                    //$("#sonuc").show().html(" Kayıt Başarılı!").delay("5000").fadeOut();
+                    //loginEmail.val(data.email); loginPassword.val(data.password);
+                    //tab.show();
                 },
                 error: function (err) {
                     alert("Hata oluştu " + err.status + " " + err.statusText);
@@ -157,6 +141,6 @@
             });
 
         }
+
     </script>
-</body>
-</html>
+}

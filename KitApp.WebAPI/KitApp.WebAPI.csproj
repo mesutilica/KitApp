@@ -32,4 +32,8 @@
     <None Include="wwwroot\lib\jquery\jquery.min.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Account\" />
+  </ItemGroup>
+
 </Project>

@@ -8,9 +8,11 @@ using KitApp.WebAPI.Application.UserOperations.Commands.CreateToken;
 using KitApp.WebAPI.TokenOperations.Models;
 using AutoMapper;
 using KitApp.WebAPI.Application.UserOperations.Commands.RefreshToken;
+using Microsoft.AspNetCore.Cors;
 
 namespace KitApp.WebAPI.Controllers
 {
+    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -43,7 +45,7 @@ namespace KitApp.WebAPI.Controllers
         }
 
         [HttpPost("connect/token")]
-        public ActionResult<Token> Login([FromBody] CreateTokenModel login)
+        public ActionResult<Token> Login(CreateTokenModel login)//[FromBody] 
         {
             CreateTokenCommand command = new CreateTokenCommand(_context, _mapper, _configuration);
             command.Model = login;
@@ -52,7 +54,7 @@ namespace KitApp.WebAPI.Controllers
         }
 
         [HttpGet("refreshToken")]
-        public ActionResult<Token> RefreshToken([FromQuery] string token)
+        public ActionResult<Token> RefreshToken([FromQuery] string token)//token a gelecek refreshToken değeri RefreshTokenCommand a gönderilip yenileniyor
         {
             RefreshTokenCommand command = new RefreshTokenCommand(_context, _configuration);
             command.RefreshToken = token;

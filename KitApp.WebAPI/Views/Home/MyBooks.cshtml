@@ -1,0 +1,136 @@
+﻿@model IEnumerable<KitApp.Core.Entities.Book>
+
+@{
+    ViewData["Title"] = "Kitaplar";
+    Layout = "_PaneLayout";
+}
+
+<h1>Kitaplar</h1>
+
+<hr />
+<table id="books" class="table table-striped table-hover">
+    <thead><tr><td>No</td><td>Kitap Adı</td><td>Yazarı</td><td>Yayınevi</td><td>Kalan Miktarı</td><td></td></tr></thead>
+</table>
+
+<div id="error"></div>
+<div id="sonuc" class="alert alert-success" style="display:none;"></div>
+
+@section Scripts {
+    <script>
+
+        LoadBooks();
+
+        function RefreshToken(refToken) {
+            $.ajax({
+                method: "GET",
+                url: "/api/User/refreshToken?token=" + refToken,
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data == null) {
+                        $("#error").html("Giriş Başarısız!");
+                        return;
+                    }
+                    else {
+                        sessionStorage.setItem("accessToken", data.accessToken);
+                        sessionStorage.setItem("refreshToken", data.refreshToken);
+                    }
+                }
+            }).done(function (response) {
+                //console.log(response);
+            }).fail(function () {
+                console.log("Hata oluştu.");
+            });
+        }
+        function LoadBooks() {
+
+            var ul = $("#books thead");
+            //ul.empty();
+
+            $.ajax({
+                method: "GET",
+                url: "/Api/AppUsers/GetMyBooks?token=" + sessionStorage.getItem("refreshToken"),
+                dataType: "json",
+                //headers: { Authorization: "Basic " + btoa(name + ":" + pass) },
+                headers: { Authorization: "Bearer " + sessionStorage.getItem("accessToken") },
+                beforeSend: function (xhr) {
+                    //xhr.setRequestHeader('Authorization', "Bearer " + sessionStorage.getItem("accessToken"));
+                    $("#ajax-loader").show();
+                },
+                success: function (data) {
+
+                    //console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        var book = data[i].book;
+                        //console.log(data[i].book.name);
+                        var li = $("<tr><td>" + book.id + "</td><td>" + book.name + "</td><td>" + book.authorName + "</td><td>" + book.publisherName + "</td><td>" + book.amount + "</td><td> <button id='btnGetData " + book.id + "' data-id='" + book.id + "'  onclick='UnReserveBook(" + book.id + ")' type='button' class='btn btn-sm btn-info'>İade Et</button><td></tr>")
+
+                        ul.after(li);
+                    }
+                },
+                error: function (err) {
+                    console.log("Hata oluştu " + err.status + " " + err.statusText);
+                    if (err.status == 401) window.location.href = "/Login";
+                },
+                complete: function () {
+                    $("#ajax-loader").hide();
+                    //RefreshToken(sessionStorage.getItem("refreshToken"));
+                }
+            }).done(function (response, statusText, jqXHR) {
+                //console.log(jqXHR);
+
+                //console.log(response);
+
+                if (response == null)
+                    return;
+
+            }).fail(function (err) {
+                //alert("Hata oluştu " + err.status + " " + err.statusText);
+                if (err.status == 401) window.location.href = "/Login";
+            });
+        }
+        function UnReserveBook(id) {
+
+            var refreshToken = sessionStorage.getItem("refreshToken");
+            var veri = {
+                "RefreshToken": refreshToken,
+                "Id": id
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "/api/AppUsers/PostBookRemove",
+                dataType: "json",
+                headers: { Authorization: "Bearer " + sessionStorage.getItem("accessToken") },
+                contentType: 'application/json',
+                data: JSON.stringify(veri),
+                beforeSend: function () {
+                    //console.log(veri);
+                    //$("#ajax-loader").show();
+                },
+                complete: function (data) {
+                    //console.log("complete : " + data);
+                    //$("#ajax-loader").hide();
+                },
+                success: function (data) {
+                    //console.log("success : " + data);
+                    if (data == null) {
+                        $("#error").html("İşlem Başarısız!");
+                        return;
+                    }
+                    else {
+                        $("#sonuc").show().html("Kitap İade Edildi!").delay("slow").fadeOut();
+                        LoadBooks();
+                    }
+                },
+                error: function (err) {
+                    console.log("Hata oluştu " + err.status + " " + err.statusText);
+                },
+            }).fail(function (err) {
+                alert("Hata oluştu " + err.status + " " + err.statusText);
+            });
+
+        }
+    </script>
+}
+

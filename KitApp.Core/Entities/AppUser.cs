@@ -25,10 +25,10 @@ namespace KitApp.Core.Entities
         public DateTime CreateDate { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpireDate { get; set; }
-        public List<Book> Books { get; set; }
+        /*public List<Book> Books { get; set; }
         public AppUser()
         {
             Books = new List<Book>();
-        }
+        }*/
     }
 }

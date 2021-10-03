@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using AutoMapper;
-
 using KitApp.Core.Entities;
 using KitApp.Core.Services;
 using KitApp.WebAPI.TokenOperations;
@@ -32,8 +29,9 @@ namespace KitApp.WebAPI.Application.UserOperations.Commands.RefreshToken
                 Token token = tokenHandler.CreateAccessToken(user);
 
                 user.RefreshToken = token.RefreshToken;
-                user.RefreshTokenExpireDate = token.Expiration.AddMinutes(5);
-                _context.SaveChangesAsync();
+                user.RefreshTokenExpireDate = token.Expiration.AddMinutes(30);
+                _context.Update(user);
+               // _context.SaveChangesAsync();
 
                 return token;
             }

@@ -7,6 +7,7 @@ namespace KitApp.Core.UnitOfWorks
     {
         IAppUserRepository user { get; }
         IBookRepository book { get; }
+        IUserBooksRepository userbook { get; }
         Task CommitAsync();
         void Commit();
     }
