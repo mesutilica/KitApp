@@ -7,6 +7,9 @@ using KitApp.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using KitApp.WebAPI.Models;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace KitApp.WebAPI.Controllers
 {
@@ -73,6 +76,11 @@ namespace KitApp.WebAPI.Controllers
         {
             try
             {
+                var user = _context.FirstOrDefaultAsync(u => u.Email == appUser.Email);
+                if (user != null)
+                {
+                    return Conflict(new { message = $" '{appUser.Email}' mail adresi sistemde zaten kayıtlı." });
+                }
                 appUser.CreateDate = DateTime.Now;
                 appUser.IsActive = true;
                 await _context.AddAsync(appUser);
@@ -85,7 +93,10 @@ namespace KitApp.WebAPI.Controllers
         }
 
         [HttpPost("PostBookAdd")]
-        public async Task<ActionResult<PostBookAdd>> PostBookAddAsync(PostBookAdd postBookAdd)//[FromBody] 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status304NotModified)]
+        public async Task<ActionResult<PostBookAdd>> PostBookAddAsync(PostBookAdd postBookAdd)//[FromBody] IActionResult
         {
             try
             {
@@ -101,8 +112,21 @@ namespace KitApp.WebAPI.Controllers
                 {
                     return NotFound();
                 }
-                //ppUser.Books.Add(book);
-                //_context.Update(appUser);
+                var userbooks = await _userBookService.Where(x => x.AppUserId == appUser.Id);
+                if (userbooks.ToList().Count >= 3)
+                {
+                    return Problem("Max 3 kitap alınabilir!", statusCode: StatusCodes.Status417ExpectationFailed);
+                }
+                var userbook = userbooks.FirstOrDefault(x => x.BookId == postBookAdd.Id);
+                if (userbook != null)
+                {
+                    return Conflict(new { message = $" '{book.Name}' kitabı kitaplığınızda zaten kayıtlı." });
+                }
+                if (book.Amount < 1)
+                {
+                    //return Content("Miktar Yetersiz!");
+                    return Problem("Miktar Yetersiz!", statusCode: StatusCodes.Status304NotModified);
+                }
                 var userBook = new UserBooks()
                 {
                     Amount = 1,
@@ -117,7 +141,7 @@ namespace KitApp.WebAPI.Controllers
                 book.Amount -= 1;
                 _bookService.Update(book);
                 //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
-                return Ok(postBookAdd);
+                return Ok(postBookAdd);//
             }
             catch
             {
@@ -128,27 +152,27 @@ namespace KitApp.WebAPI.Controllers
         [HttpPost("PostBookRemove")]
         public async Task<ActionResult<PostBookAdd>> PostBookRemoveAsync(PostBookAdd postBookAdd)//[FromBody] 
         {
-            
-                var appUser = await _context.SingleOrDefaultAsync(x => x.RefreshToken == postBookAdd.RefreshToken);
 
-                if (appUser == null)
-                {
-                    return NotFound();
-                }
-                var book = await _bookService.GetByIdAsync(postBookAdd.Id);
+            var appUser = await _context.SingleOrDefaultAsync(x => x.RefreshToken == postBookAdd.RefreshToken);
 
-                if (book == null)
-                {
-                    return NotFound();
-                }
-                var userBook = await _userBookService.SingleOrDefaultAsync(u => u.BookId == book.Id && u.AppUserId == appUser.Id);
-                _userBookService.Remove(userBook);
-                book.Amount += 1;
-                _bookService.Update(book);
-                //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
-                return Ok(postBookAdd);
+            if (appUser == null)
+            {
+                return NotFound();
+            }
+            var book = await _bookService.GetByIdAsync(postBookAdd.Id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+            var userBook = await _userBookService.FirstOrDefaultAsync(u => u.BookId == book.Id && u.AppUserId == appUser.Id);
+            _userBookService.Remove(userBook);
+            book.Amount += 1;
+            _bookService.Update(book);
+            //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
+            return Ok(postBookAdd);
             try
-            {}
+            { }
             catch
             {
                 return Problem("Hata Oluştu!");

@@ -39,7 +39,7 @@
                             
                         </ul>
                         <hr>
-                        
+                        <input id="btnCikis" name="btnCikis" type="button" value="Çıkış" />
                     </div>
                 </div>
                 <div class="col-sm-9">
@@ -58,6 +58,12 @@
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $("#btnCikis").on("click", function () {
+            sessionStorage.clear();
+            window.location.href = "/Login";
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Net;
 using System.Text;
 
 namespace KitApp.WebAPI
@@ -89,7 +90,18 @@ namespace KitApp.WebAPI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            
+            //app.UseStatusCodePages(async context =>
+            //{
+            //    var request = context.HttpContext.Request;
+            //    var response = context.HttpContext.Response;
+
+            //    if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+            //    // you may also check requests path to do this only for specific methods       
+            //    // && request.Path.Value.StartsWith("/specificPath")
+            //    {
+            //        response.Redirect("/Login");
+            //    }
+            //});
 
             app.UseAuthentication();
             app.UseAuthorization();

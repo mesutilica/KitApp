@@ -64,7 +64,7 @@
                     gonder = false;
                 }
 
-                if (isEmail($("#email").val()) == false) {
+                if (isEmail($("#Email").val()) == false) {
                     errormessage += "<p>Email alanı düzgün girilmedi.</p>";
                     gonder = false;
                 }
@@ -120,14 +120,15 @@
                 contentType: 'application/json',
                 data: JSON.stringify(appUser),
                 beforeSend: function () {
-                    console.log(appUser);
+                    //console.log(appUser);
                     $("#ajax-loader").show();
                 },
                 complete: function () {
                     $("#ajax-loader").hide();
                 },
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
+                    if (data != null) window.location.href = "/Login";
                     //document.getElementById("record").reset();
                     //$("#sonuc").show().html(" Kayıt Başarılı!").delay("5000").fadeOut();
                     //loginEmail.val(data.email); loginPassword.val(data.password);

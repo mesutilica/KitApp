@@ -37,6 +37,11 @@ namespace KitApp.Service.Services
             return entities;
         }
 
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _repository.FirstOrDefaultAsync(predicate);
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _repository.GetAllAsync();

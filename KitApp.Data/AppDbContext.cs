@@ -17,6 +17,20 @@ namespace KitApp.Data
         {
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            //Login kullanıcısı
+            modelBuilder.Entity<AppUser>().
+                HasData(new AppUser
+                {
+                    Id = 1,
+                    UserName = "demouser",
+                    Password = "demouser1",
+                    Email = "demo@user.com",
+                    Name = "demo",
+                    SurName = "test",
+                    Phone = "0216",
+                    CreateDate = System.DateTime.Now,
+                    IsActive = true
+                });
             //base.OnModelCreating(modelBuilder);
         }
     }

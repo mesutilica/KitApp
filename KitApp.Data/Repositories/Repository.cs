@@ -60,6 +60,11 @@ namespace KitApp.Data.Repositories
             return await _dbSet.SingleOrDefaultAsync(predicate);
         }
 
+        public async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
+
         public TEntity Update(TEntity entity)
         {
             _context.Entry(entity).State = EntityState.Modified;

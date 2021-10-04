@@ -9,7 +9,7 @@
 
 <hr />
 <table id="books" class="table table-striped table-hover">
-    <thead><tr><td>No</td><td>Kitap Adı</td><td>Yazarı</td><td>Yayınevi</td><td>Kalan Miktarı</td><td></td></tr></thead>
+    <thead><tr><td>No</td><td>Kitap Adı</td><td>Yazarı</td><td>Yayınevi</td><td>Kitap İade Tarihi</td><td></td></tr></thead>
 </table>
 
 <div id="error"></div>
@@ -46,7 +46,7 @@
 
             var ul = $("#books thead");
             //ul.empty();
-
+            $("#books thead + tr").empty();
             $.ajax({
                 method: "GET",
                 url: "/Api/AppUsers/GetMyBooks?token=" + sessionStorage.getItem("refreshToken"),
@@ -58,13 +58,11 @@
                     $("#ajax-loader").show();
                 },
                 success: function (data) {
-
-                    //console.log(data);
+                    console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         var book = data[i].book;
                         //console.log(data[i].book.name);
-                        var li = $("<tr><td>" + book.id + "</td><td>" + book.name + "</td><td>" + book.authorName + "</td><td>" + book.publisherName + "</td><td>" + book.amount + "</td><td> <button id='btnGetData " + book.id + "' data-id='" + book.id + "'  onclick='UnReserveBook(" + book.id + ")' type='button' class='btn btn-sm btn-info'>İade Et</button><td></tr>")
-
+                        var li = $("<tr><td>" + book.id + "</td><td>" + book.name + "</td><td>" + book.authorName + "</td><td>" + book.publisherName + "</td><td>" + new Date(data[i].returnDate).toLocaleString() + "</td><td> <button id='btnGetData " + book.id + "' data-id='" + book.id + "'  onclick='UnReserveBook(" + book.id + ")' type='button' class='btn btn-sm btn-info'>İade Et</button><td></tr>");
                         ul.after(li);
                     }
                 },
@@ -89,6 +87,8 @@
                 if (err.status == 401) window.location.href = "/Login";
             });
         }
+
+        //Kitap iade methodu
         function UnReserveBook(id) {
 
             var refreshToken = sessionStorage.getItem("refreshToken");
@@ -119,8 +119,9 @@
                         return;
                     }
                     else {
-                        $("#sonuc").show().html("Kitap İade Edildi!").delay("slow").fadeOut();
-                        LoadBooks();
+                        $("#sonuc").show().html("Kitap İade Edildi!").delay("5000").fadeOut();
+                        //LoadBooks();
+                        location.reload();
                     }
                 },
                 error: function (err) {
