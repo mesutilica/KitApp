@@ -24,7 +24,7 @@ namespace KitApp.WebAPI.Application.UserOperations.Commands.CreateToken
 
         public Token Handle()
         {
-            AppUser user = _context.SingleOrDefaultAsync(x => x.Email == Model.Email && x.Password == Model.Password).Result;
+            AppUser user = _context.FirstOrDefaultAsync(x => x.Email == Model.Email && x.Password == Model.Password).Result;
             if (user is not null)
             {
                 //Token üretiliyor.

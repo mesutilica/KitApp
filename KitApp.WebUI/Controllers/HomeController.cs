@@ -1,13 +1,11 @@
 ﻿using KitApp.Core.Entities;
 using KitApp.Core.Services;
 using KitApp.WebUI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +47,22 @@ namespace KitApp.WebUI.Controllers
         {
             return View();
         }
-
+        [Route("Login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        //[Authorize]
+        public IActionResult Books()
+        {
+            //var books = await _context.GetAllAsync();
+            return View();//books
+        }
+        //[Authorize]
+        public IActionResult MyBooks()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

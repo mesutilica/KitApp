@@ -1,6 +1,7 @@
 ﻿@model AppUser
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Anasayfa";
 }
 
 <div class="container col-xl-10 col-xxl-8 px-4 py-3">
@@ -10,39 +11,149 @@
             <p class="col-lg-10 fs-4">KitApp ile kütüphane ayağınıza geliyor. <br /> Denemek için ücretsiz kayıt olun online kütüphaneyi kullanmaya başlayın..</p>
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
-            <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" asp-action="Add">
+            <form class="p-4 p-md-5 border rounded-3 bg-light mt-3" method="post" id="record">
+                <h3>Ücretsiz Kaydol</h3>
                 <div class="form-floating mb-3">
-                    <input asp-for="Name" type="text" class="form-control" id="Name" placeholder="Adınız">
-                    <label for="Name">Adınız</label>
+                    <input asp-for="@Model.Name" type="text" class="form-control" id="Name" placeholder="Adınız" required>
+                    <label for="Name">Adınız *</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="SurName" type="text" class="form-control" id="SurName" placeholder="Soyadınız">
-                    <label for="SurName">Soyadınız</label>
+                    <input asp-for="@Model.SurName" type="text" class="form-control" id="SurName" placeholder="Soyadınız" required>
+                    <label for="SurName">Soyadınız *</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="name@example.com">
-                    <label for="Email">Email</label>
+                    <input asp-for="@Model.Email" type="email" class="form-control" id="Email" placeholder="name@example.com" required>
+                    <label for="Email">Email *</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Password" type="password" class="form-control" id="Password" placeholder="Şifre">
-                    <label for="Password">Şifre</label>
-                </div>
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Beni hatırla
-                    </label>
+                    <input asp-for="@Model.Password" type="password" class="form-control" id="Password" placeholder="Şifre" required>
+                    <label for="Password">Şifre *</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" type="button" id="btnCreate">Kaydol</button>
                 <hr class="my-4">
+                <div id="error"></div>
                 <small class="text-muted">Kaydol'a tıklayarak kullanım şartlarını kabul etmiş olursunuz.</small>
             </form>
+
             <div class="text-center" style="display:none;" id="ajax-loader">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
-            <div id="sonuc" class="alert alert-success" style="display:none;"></div>
+            <div id="sonuc" class="alert alert-success mt-1" style="display:none;"></div>
 
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(function () {
+
+            function isEmail(email) {
+                var pattern = /^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/;
+                return pattern.test(email);
+            }
+            $("#btnCreate").click(function () {
+                var gonder = true;
+                var errormessage = "";
+                $("#error").html("");
+
+                if ($("#email").val() == "") {
+                    errormessage += "<p>Email alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+                if (isEmail($("#Email").val()) == false) {
+                    errormessage += "<p>Email alanı düzgün girilmedi.</p>";
+                    gonder = false;
+                }
+
+
+                if ($("#Name").val() == "") {
+                    errormessage += "<p>Adınız alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+                if ($("#SurName").val() == "") {
+                    errormessage += "<p>Soyadınız alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+                if ($("#Password").val() == "") {
+                    errormessage += "<p>Şifre alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+
+                if (errormessage != "") {
+                    $("#error").html(errormessage);
+                }
+                if (gonder) {
+                    CreateUser();
+                };
+            });
+        });
+        //var someTabTriggerEl = document.querySelector('#profile-tab');
+        //var tab = new bootstrap.Tab(someTabTriggerEl);
+
+
+        function CreateUser() {
+
+            var Name = $("#Name").val();
+            var SurName = $("#SurName").val();
+            var Email = $("#Email").val();
+            var Password = $("#Password").val();
+            //var loginEmail = $("#loginEmail");
+            //var loginPassword = $("#loginPassword");
+
+            var appUser = {
+                "Name": Name,
+                "SurName": SurName,
+                "Email": Email,
+                "Password": Password
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "https://localhost:44322/api/User",
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify(appUser),
+                beforeSend: function () {
+                    //console.log(appUser);
+                    $("#ajax-loader").show();
+                },
+                complete: function (data) {
+                    //console.log("complete " + data);
+                    $("#ajax-loader").hide();
+                },
+                success: function (data) {
+                    //console.log("success " + data);
+                    if (data != null) window.location.href = "/Login";
+                    //document.getElementById("record").reset();
+                    //$("#sonuc").show().html(" Kayıt Başarılı!").delay("5000").fadeOut();
+                    //loginEmail.val(data.email); loginPassword.val(data.password);
+                    //tab.show();
+                },
+                error: function (err) {
+                    //console.log("error " + err);
+                    if (err.status == 409) $("#sonuc").show().addClass("alert-danger").html("Mail adresi sistemde zaten kayıtlı!").delay("5000").fadeOut();
+                    console.log("Hata oluştu err.status : " + err.status + " err.statusText : " + err.statusText);
+                }
+            }).done(function (response, statusText, jqXHR) {
+                //console.log("done response " + response);
+                //console.log("done statusText " + statusText);
+                //console.log("done jqXHR " + jqXHR);
+
+                if (response == null)
+                    return;
+
+            }).fail(function (err) {
+                console.log("fail " + err);
+                console.log("İşlem başarısız oldu " + err.status + " " + err.statusText);
+            });
+
+        }
+
+    </script>
+}

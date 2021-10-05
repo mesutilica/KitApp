@@ -1,7 +1,6 @@
 ﻿@model HomePageViewModel
 @{
-    ViewData["Title"] = "Anasayfa";
-    
+    ViewData["Title"] = "Anasayfa";    
 }
 
 <div class="container col-xl-10 col-xxl-8 px-4 py-3">
@@ -115,7 +114,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/api/User",
+                url: "https://localhost:44322/api/User",
                 dataType: "json",
                 contentType: 'application/json',
                 data: JSON.stringify(appUser),

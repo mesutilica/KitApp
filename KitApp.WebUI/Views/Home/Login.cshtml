@@ -1,0 +1,127 @@
+﻿@model HomePageViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-3">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3">KitApp <br /> Online Kütüphane</h1>
+            <p class="col-lg-10 fs-4">KitApp ile kütüphane ayağınıza geliyor. <br /> Denemek için ücretsiz kayıt olun online kütüphaneyi kullanmaya başlayın..</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-light mt-3" method="post" id="login">
+                <h3>Kullanıcı Girişi</h3>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com">
+                    <label for="Email">Email *</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Şifre">
+                    <label for="Password">Şifre *</label>
+                </div>
+
+                @*<div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Beni hatırla
+                        </label>
+                    </div>*@
+                <button class="w-100 btn btn-lg btn-primary" type="button" id="btnLogin">Giriş</button>
+                <div id="error"></div>
+            </form>
+
+            <div class="text-center" style="display:none;" id="ajax-loader">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div id="sonuc" class="alert alert-success mt-1" style="display:none;"></div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            function isEmail(email) {
+                var pattern = /^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/;
+                return pattern.test(email);
+            }
+            $("#btnLogin").click(function () {
+                var gonder = true;
+                var errormessage = "";
+                $("#error").html("");
+
+                if ($("#loginEmail").val() == "") {
+                    errormessage += "<p>Email alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+                if (isEmail($("#loginEmail").val()) == false) {
+                    errormessage += "<p>Email alanı düzgün girilmedi.</p>";
+                    gonder = false;
+                }
+
+                if ($("#loginPassword").val() == "") {
+                    errormessage += "<p>Şifre alanı zorunlu alan</p>";
+                    gonder = false;
+                }
+
+
+                if (errormessage != "") {
+                    $("#error").html(errormessage);
+                }
+                if (gonder) {
+                    LoginUser();
+                };
+            });
+        });
+        //var someTabTriggerEl = document.querySelector('#profile-tab');
+        //var tab = new bootstrap.Tab(someTabTriggerEl);
+
+        function LoginUser() {
+
+            var loginEmail = $("#loginEmail").val();
+            var loginPassword = $("#loginPassword").val();
+
+            var login = {
+                "Email": loginEmail,
+                "Password": loginPassword
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "https://localhost:44322/api/User/connect/token",
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify(login),
+                beforeSend: function () {
+                    //console.log(login);
+                    $("#ajax-loader").show();
+                },
+                complete: function () {
+                    $("#ajax-loader").hide();
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data == null) {
+                        $("#error").html("Giriş Başarısız!");
+                        return;
+                    }
+                    else {
+                        sessionStorage.setItem("accessToken", data.accessToken);
+                        sessionStorage.setItem("refreshToken", data.refreshToken);
+                        window.location.href = "/Home/Books";
+                    }
+                },
+                error: function (err) {
+                    console.log("Hata oluştu " + err.status + " " + err.statusText);
+                },
+            }).fail(function (err) {
+                alert("Hata oluştu " + err.status + " " + err.statusText);
+            });
+
+        }
+    </script>
+}

@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KitApp.WebUI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <style>
+        body { min-height: 100vh; min-height: -webkit-fill-available; }
+        main { display: flex; flex-wrap: nowrap; height: 100vh; height: -webkit-fill-available; max-height: 100vh; overflow-x: auto; overflow-y: hidden; }
+    </style>
+</head>
+<body>
+    <header>
+    </header>
+    <main role="main" class="pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="height: 90vh;">
+                        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                            <span class="fs-4">Menü</span>
+                        </a>
+                        <hr>
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            <li class="nav-item">
+                                <a href="/Home/Books" class="nav-link" aria-current="page">
+                                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                                    Tüm Kitaplar
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/Home/MyBooks" class="nav-link link-dark">
+                                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                                    Kitaplarım
+                                </a>
+                            </li>
+                            
+                        </ul>
+                        <hr>
+                        <input id="btnCikis" name="btnCikis" type="button" value="Çıkış" />
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </main>
+    
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - KitApp.WebUI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $("#btnCikis").on("click", function () {
+            sessionStorage.clear();
+            window.location.href = "/Login";
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

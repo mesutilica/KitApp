@@ -1,10 +1,12 @@
 ﻿using KitApp.Core.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace KitApp.WebAPI.Controllers
 {
+    [EnableCors]
     public class HomeController : Controller
     {
         private readonly IBookService _context;

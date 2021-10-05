@@ -33,10 +33,18 @@ namespace KitApp.WebAPI.Controllers
         {
             try
             {
-                appUser.CreateDate = DateTime.Now;
-                appUser.IsActive = true;
-                await _context.AddAsync(appUser);
-                return CreatedAtAction("GetAppUser", new { id = appUser.Id }, appUser);
+                var user = await _context.FirstOrDefaultAsync(x => x.Email == appUser.Email);
+                if (user != null)
+                {
+                    return Conflict(new { errMes = appUser.Email + " adresi sistemde zaten kayıtlı!" });
+                }
+                else
+                {
+                    appUser.CreateDate = DateTime.Now;
+                    appUser.IsActive = true;
+                    await _context.AddAsync(appUser);
+                    return CreatedAtAction("GetAppUser", new { id = appUser.Id }, appUser);
+                }
             }
             catch (Exception)
             {

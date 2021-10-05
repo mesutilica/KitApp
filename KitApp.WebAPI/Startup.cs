@@ -49,9 +49,7 @@ namespace KitApp.WebAPI
                 });
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
             services.AddAutoMapper(typeof(Startup));
             services.AddSession();
@@ -103,10 +101,11 @@ namespace KitApp.WebAPI
             //    }
             //});
 
+            app.UseCors("MyPolicy");
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseCors("MyPolicy");
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
