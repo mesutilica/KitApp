@@ -152,27 +152,27 @@ namespace KitApp.WebAPI.Controllers
         [HttpPost("PostBookRemove")]
         public async Task<ActionResult<PostBookAdd>> PostBookRemoveAsync(PostBookAdd postBookAdd)//[FromBody] 
         {
-
-            var appUser = await _context.SingleOrDefaultAsync(x => x.RefreshToken == postBookAdd.RefreshToken);
-
-            if (appUser == null)
-            {
-                return NotFound();
-            }
-            var book = await _bookService.GetByIdAsync(postBookAdd.Id);
-
-            if (book == null)
-            {
-                return NotFound();
-            }
-            var userBook = await _userBookService.FirstOrDefaultAsync(u => u.BookId == book.Id && u.AppUserId == appUser.Id);
-            _userBookService.Remove(userBook);
-            book.Amount += 1;
-            _bookService.Update(book);
-            //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
-            return Ok(postBookAdd);
             try
-            { }
+            {
+                var appUser = await _context.SingleOrDefaultAsync(x => x.RefreshToken == postBookAdd.RefreshToken);
+
+                if (appUser == null)
+                {
+                    return NotFound();
+                }
+                var book = await _bookService.GetByIdAsync(postBookAdd.Id);
+
+                if (book == null)
+                {
+                    return NotFound();
+                }
+                var userBook = await _userBookService.FirstOrDefaultAsync(u => u.BookId == book.Id && u.AppUserId == appUser.Id);
+                _userBookService.Remove(userBook);
+                book.Amount += 1;
+                _bookService.Update(book);
+                //return Ok(new { id = appUser.Id, appUser = appUser, postBookAdd = postBookAdd, message = "İşlem Başarılı" });
+                return Ok(postBookAdd);
+            }
             catch
             {
                 return Problem("Hata Oluştu!");
